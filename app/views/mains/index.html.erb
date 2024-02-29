@@ -1,0 +1,14 @@
+<h1>Mains#index</h1>
+<p>Find me in app/views/mains/index.html.erb</p>
+
+<div>
+    <%= ENV['DB_USERNAME'] %>
+</div>
+
+<ul>
+    <% @articles.each do |article| %>
+        <li>
+            <%= article.title %>
+        </li>
+    <% end %>
+</ul>

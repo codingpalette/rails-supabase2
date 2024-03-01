@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-  get 'users/index'
+  get  '/users', to:'users#index'
   post '/users', to: 'users#create'
+  post '/users/login', to: 'users#login'
+  post '/users/logout', to: 'users#logout'
   # get 'mains/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

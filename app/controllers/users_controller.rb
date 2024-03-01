@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   def index
+      puts "user_session: #{session[:user_id]}"
+      puts "user: #{current_user.inspect}"
   end
 
   def create
@@ -12,15 +14,43 @@ class UsersController < ApplicationController
             render json: { status: 'error', message: 'Email already taken' }, status: :unprocessable_entity
         else
             # 사용자 생성
-            @user.save
-            # User.create(@user)
-            render json: { status: 'success', message: 'User created successfully'}
+            if @user.save
+                # @user.save
+                # User.create(@user)
+                render json: { status: 'success', message: 'User created successfully'}
+            else
+                render json: { status: 'error', message: @user.errors.full_messages.to_sentence }, status: :unprocessable_entity
+            end
         end
     else
-        render json: { status: 'error', message: 'User not created'}, status: :unprocessable_entity
+        render json: { status: 'error', message: @user.errors.full_messages.to_sentence }, status: :unprocessable_entity
     end
 
   end
+  # create and
+
+  def login
+        @user = User.find_by(email: user_params[:email])
+
+        if @user && @user.authenticate(user_params[:password])
+            # 로그인 성공: 사용자 ID를 세션에 저장
+            session[:user_id] = @user.id
+            render json: { state: 'success', message: 'User logged in successfully' }
+        else
+            render json: { state: 'error', message: 'Invalid email or password' }, status: :unauthorized
+        end
+
+
+
+
+  end
+
+  def logout
+    session.delete(:user_id)
+    @current_user = nil
+    render json: { state: 'success', message: 'Logged out successfully' }
+  end
+
 end
 
 private

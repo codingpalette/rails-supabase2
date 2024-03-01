@@ -12,8 +12,10 @@ export default class extends Controller {
     const email = this.emailTarget.value;
     const password = this.passwordTarget.value;
     const data = {
-      email: email,
-      password: password,
+      user: {
+        email: email,
+        password: password,
+      },
     };
 
     // console.log(`Email: ${email}, Password: ${password}`);
@@ -39,5 +41,54 @@ export default class extends Controller {
       .catch((error) => {
         console.error("error", error);
       });
+  }
+
+  login(event) {
+    event.preventDefault(); // 폼의 기본 제출 동작을 방지
+    const email = this.emailTarget.value;
+    const password = this.passwordTarget.value;
+    const data = {
+      user: {
+        email: email,
+        password: password,
+      },
+    };
+
+    // CSRF 토큰 읽기
+    const csrfToken = document
+      .querySelector("meta[name='csrf-token']")
+      .getAttribute("content");
+
+    fetch("/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken, // CSRF 토큰을 헤더에 추가
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        console.log("response", response);
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
+  }
+
+  logout(event) {
+    console.log("logout");
+
+    // CSRF 토큰 읽기
+    const csrfToken = document
+      .querySelector("meta[name='csrf-token']")
+      .getAttribute("content");
+
+    fetch("/users/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken, // CSRF 토큰을 헤더에 추가
+      },
+    });
   }
 }

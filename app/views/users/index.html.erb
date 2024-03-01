@@ -20,4 +20,30 @@
         </div>
 
     </form>
+
+
+</div>
+
+<div data-controller="users">
+    <!-- 로그인 폼 만들기  -->
+
+    <form data-action="submit->users#login" id="login_form">
+        <div class="field">
+            <label for="email2">Email</label><br />
+            <input data-target="users.email" type="text" id="email2"   />
+        </div>
+
+        <div class="field">
+            <label for="password">Password</label><br />
+            <input data-target="users.password" type="password"  autocomplete="current-password" />
+        </div>
+
+        <div>
+            <button type="submit">Log in</button>
+        </div>
+    </form>
+</div>
+
+<div data-controller="users">
+    <button data-action="users#logout">logout</button>
 </div>
